@@ -1,0 +1,7 @@
+.pytest_cache
+.idea
+__pycache__
+problem/__pycache__
+paso a paso.odt
+.~lock.paso a paso
+
