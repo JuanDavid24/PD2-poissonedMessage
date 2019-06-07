@@ -3,8 +3,8 @@ import json
 
 connection = pika.BlockingConnection(pika.ConnectionParameters('rabbitmq-sv'))
 channel = connection.channel()
-#args = ({'x-dead-letter-exchange': ''})
-channel.queue_declare(queue='cola')
+args = ({'x-dead-letter-exchange': ''})
+channel.queue_declare(queue='cola',arguments=args)
 channel.basic_publish(exchange = '',
                       routing_key = 'cola',
                       body = json.dumps((7,0)),
