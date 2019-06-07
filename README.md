@@ -26,7 +26,7 @@ y luego:
 
 <h5> Solución aplicando dead-lettering: </h5>
 
-**5B.** Idem 6A, pero al ejecutar:
+**5B.** Idem 5A, pero al ejecutar:
 `python3 solution/receiver.py`
 
 **6B.** Idem 6B, pero al ejecutar:
