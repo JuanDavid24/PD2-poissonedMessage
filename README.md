@@ -12,12 +12,22 @@
 **4.** En una segunda terminal, creo el container para el consumidor:
 `docker run --name receiver -it --link rabbitmq-sv:rb -v $(pwd):/program rabbitmq-cli-im`
 
-**5.** Dentro de este ultimo container:
+<h5> Problema en cuestión, ocasionado por un poissoned message, sin tratarlo: </h5>
+
+**5A.** Dentro de este ultimo container:
 `cd program`
 y luego:
 `python3 problem/receiver.py`
 
-**6.** Despues, en la primer terminal:
+**6A.** Despues, en la primer terminal:
 `cd program`
 y luego:
 `python3 problem/sender.py`
+
+<h5> Solución aplicando dead-lettering: </h5>
+
+**5B.** Idem 6A, pero al ejecutar:
+`python3 solution/receiver.py`
+
+**6B.** Idem 6B, pero al ejecutar:
+`python3 solution/sender.py`
