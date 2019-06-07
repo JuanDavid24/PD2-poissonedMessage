@@ -3,8 +3,8 @@ import json
 
 connection = pika.BlockingConnection(pika.ConnectionParameters('rabbitmq-sv'))
 channel = connection.channel()
-#args = ({'x-dead-letter-exchange': ''})
-channel.queue_declare(queue='cola')
+args = ({'x-dead-letter-exchange': ''})
+channel.queue_declare(queue='cola',arguments=args)
 
 def callback(ch, method, properties, body):
     recibed = json.loads(body)
