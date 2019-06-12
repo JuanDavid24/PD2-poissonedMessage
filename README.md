@@ -1,7 +1,9 @@
 ## Actividad Poissoned message con RabbitMQ
 
-**1.** Crear container para el server :
+**1.** Crear container para el server:
 `docker run --name rabbitmq-sv rabbitmq`
+Luego, correrlo:
+`docker start rabbitmq-sv`
 
 **2.** Crear una imagen para el cliente de rabbit:
 `docker build -t rabbitmq-cli-im .`

@@ -3,7 +3,8 @@ import json
 
 connection = pika.BlockingConnection(pika.ConnectionParameters('rabbitmq-sv'))
 channel = connection.channel()
-args = ({'x-dead-letter-exchange': ''})
+channel.exchange_declare(exchange='DLX',exchange_type='direct')
+args = ({'x-dead-letter-exchange': 'DLX'})
 channel.queue_declare(queue='cola',arguments=args)
 
 def callback(ch, method, properties, body):
