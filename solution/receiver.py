@@ -1,11 +1,16 @@
 import pika
 import json
 
+#RabbitMQ setup
 connection = pika.BlockingConnection(pika.ConnectionParameters('rabbitmq-sv'))
 channel = connection.channel()
 channel.exchange_declare(exchange='DLX',exchange_type='direct')
 args = ({'x-dead-letter-exchange': 'DLX'})
 channel.queue_declare(queue='cola',arguments=args)
+channel.queue_declare(queue='poissonQueue')
+channel.queue_bind(queue='poissonQueue', exchange='DLX')
+
+print('\n*Waiting for message to arrive...*')
 
 def callback(ch, method, properties, body):
     recibed = json.loads(body)
@@ -19,8 +24,8 @@ def callback(ch, method, properties, body):
     except:
         #print(properties.headers)
         attempts = properties.headers['x-delivery-attempts']
+        attempts += 1
         if attempts < 3:
-            attempts += 1
             print("attempts: {at} ".format(at=attempts))
 
             channel.basic_publish(exchange='',
@@ -33,8 +38,7 @@ def callback(ch, method, properties, body):
 
         else:
             channel.basic_nack(method.delivery_tag, requeue=False)
-            print("message {tag} dead-lettered after {at} attempts".format(at= attempts+1, tag=method.delivery_tag))
-
+            print("message {tag} dead-lettered after {at} attempts".format(at= attempts, tag=method.delivery_tag))
 
 channel.basic_consume(queue='cola',
                       auto_ack=False,
