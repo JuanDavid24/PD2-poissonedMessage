@@ -7,7 +7,7 @@ channel = connection.channel()
 channel.exchange_declare(exchange='DLX',exchange_type='direct')
 channel.queue_declare(queue='poissonQueue')
 channel.queue_bind(exchange='DLX',
-                   routing_key='cola',
+                   routing_key='cola2',
                    queue='poissonQueue')
 
 print('\n*Waiting for dead leteters to arrive...*')
@@ -23,7 +23,7 @@ def callback(ch, method, properties, body):
           "\treason: {rs}.".format(r=recibed, t=method.delivery_tag, q=dHeader['queue'],
                                    d=str(dHeader['time']), rs=dHeader['reason']))
     channel.basic_ack(method.delivery_tag)
-    print('\n*Waiting for more dead leteters to arrive...*')
+    print('\n*Waiting for more dead letters to arrive...*')
 
 channel.basic_consume(queue='poissonQueue',
                       auto_ack=False,

@@ -6,7 +6,7 @@ connection = pika.BlockingConnection(pika.ConnectionParameters('rabbitmq-sv'))
 channel = connection.channel()
 channel.exchange_declare(exchange='DLX',exchange_type='direct')
 args = ({'x-dead-letter-exchange': 'DLX'})
-channel.queue_declare(queue='cola',arguments=args)
+channel.queue_declare(queue='cola2',arguments=args)
 channel.queue_declare(queue='poissonQueue')
 channel.queue_bind(queue='poissonQueue', exchange='DLX')
 
@@ -29,7 +29,7 @@ def callback(ch, method, properties, body):
             print("attempts: {at} ".format(at=attempts))
 
             channel.basic_publish(exchange='',
-                                  routing_key='cola',
+                                  routing_key='cola2',
                                   body=json.dumps(recibed),
                                   properties=pika.BasicProperties(headers={"x-delivery-attempts": attempts})
                                   )
@@ -40,7 +40,7 @@ def callback(ch, method, properties, body):
             channel.basic_nack(method.delivery_tag, requeue=False)
             print("message {tag} dead-lettered after {at} attempts".format(at= attempts, tag=method.delivery_tag))
 
-channel.basic_consume(queue='cola',
+channel.basic_consume(queue='cola2',
                       auto_ack=False,
                       on_message_callback=callback)
 
